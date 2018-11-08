@@ -1,0 +1,219 @@
+% !TeX program = xelatex %magic comment, der für alle Dokumente mit dieser Vorlage den Compiler auf xelatex statt pdflatex umstellt. Benötigt speziell, wenn man systemeigene statt latex-eigene Schriftarten braucht.
+%Die Vorlage mit Input-Befehl einfach bei neuem Dokument einfügen. Sollten einzelne Einstellungen der Präambel nicht passen, einfach nach Input-Befehl schreiben, dann werden die Einstellungen überschrieben.
+%Input bei Grafiken/Dokumenten mit Leerzeichen im Pfad macht man, indem man das Ganze in "   " setzt.
+
+\documentclass[11pt]{scrartcl}
+
+%____________________________________________________
+%Zeichen importieren
+%\usepackage[utf8]{inputenc} %importiert alle UTF8-Zeichen; deaktiviert lassen bei XeLaTeX- und LuaLaTeX-Compiler
+%\usepackage[ngerman]{babel} %enthält deutsche Silbentrennung und deutsche Benennung der automatischen Überschriften
+\usepackage{marvosym,textcomp,gensymb} %Euro-Zeichen und andere Sonderzeichen
+\usepackage[normalem]{ulem} %Unterstreichungen und Durchstreichungen
+\usepackage{amsmath,amssymb,amsfonts,permute,units} %Mathematischer Zeichensatz
+\usepackage[version=4]{mhchem} %Chemische Gleichungen
+
+%____________________________________________________
+%Text und Format
+
+\usepackage[a4paper, voffset=10mm,top=20mm, left=25mm, right=25mm, bottom=30mm, headsep=10mm, footskip=12mm]{geometry}
+\usepackage[T1]{fontenc} %importiert verschiedene Schriften; deaktiviert lassen bei XeLaTeX- und LuaLaTeX-Compiler
+%stellt Schriftart global auf Arial - Verpflichtung nach Vorlage
+%\usepackage{uarial}
+%\renewcommand{\familydefault}{\sfdefault}
+
+%\usepackage{fontspec} %erlaubt sämtliche installierten TrueType-Schriften
+%\setmainfont[]{Calibri} %bestimmt Hauptschriftart (im Unterschied zu Sans Serif und Mono)
+
+\usepackage{anyfontsize} %erlaubt Einstellen beliebiger Schriftgröße. Wichtig: \fontsize{size}{skip} erst nach \begin{document} nutzbar; Größe wird erst durch \selectfont tatsächlich geuptdated
+
+%\usepackage{titlesec} %ermöglicht Schriftgestaltung der Chapters und Sections
+%\newfontfamily\sectionfont[]{Calibri Light} %Definiert Schriftart für Section
+%\newfontfamily\subsectionfont[]{Calibri Light} %Definiert Schriftart für Subsection
+%\newfontfamily\subsubsectionfont[]{Calibri Light} %Definiert Schriftart für Subsubsection
+%\addtokomafont{disposition}{\sectionfont} %Definiert global Schriftgestaltung von allen Headlines (einschließlich Titelseite und ToC-Punkte)
+%\addtokomafont{title}{\normalfont} %Definiert Schriftgestaltung des Titels
+%\addtokomafont{section}{\bfseries\Large\sectionfont} %Definiert Schriftgestaltung der Section
+%\addtokomafont{subsection}{\bfseries\large\subsectionfont} %Definiert Schriftgestaltung der Subsection
+%\addtokomafont{subsubsection}{\bfseries\subsubsectionfont} %Definiert Schriftgestaltung der Subsubsection
+%\titlespacing*{\section}{0mm}{0mm}{0mm} %\titlespacing{section/subsection/...}{left}{before-sep}{after-sep}
+%\titlespacing*{\subsection}{0mm}{0mm}{0mm}
+%\usepackage[german,affil-sl]{authblk}
+%\renewcommand{\Authand}{\hspace*{3em}} %legt fest, was der Befehl "\and" bei \author ausgibt
+%\setlength{\affilsep}{0ex} %legt vertikalen Abstand für \affil{<Institution>} fest
+
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} %Farben-Paket mit 16 vordefinierten Farben: black, blue, brown, cyan, darkgray, gray, green, lightgray, lime, magenta, olive, orange, pink, purple, red, teal, violet, white, yellow
+
+\setlength{\parskip}{6pt} %stellt global Zeilenabstand bei neuem Paragraph ein
+
+\setlength{\parindent}{0ex} %stellt ein, wie weit bei Beginn eines neuen Absatzes die erste Zeile eingerückt werden soll
+
+\usepackage[singlespacing]{setspace} %stellt Zeilenabstand ein, ohne Fußnoten zu verändern. Verfügbar sind \singlespacing, \onehalfspacing, \doublespacing.
+
+\renewcommand{\labelenumii}{\alph{enumii})} %verändert die Nummerierungszeichen zweiter Ebene auf a), b), ...
+
+%\usepackage{scrpage2} %erlaubt benutzerdefinierte Kopf- und Fußzeilen
+%\pagestyle{scrheadings}
+%\clearscrheadfoot
+%\setheadsepline{0.5pt} %erstellt eine Linie unter der Kopfzeile mit Dicke 0.5pt
+%\automark[]{section}
+%\ihead{\includegraphics[width=0.9\linewidth]{Bilder/LogoUniUlm.png}}
+%\chead{}
+%\ohead{\headmark}
+%\ifoot{}
+%\cfoot{}
+%\ofoot{\pagemark}
+
+%\usepackage{fancyhdr} %lässt benutzerdefinierte Kopf- und Fußzeilen zu
+%\fancyhf{}
+%\pagestyle{fancy}
+%\lhead{}
+%\chead{}
+%\rhead{}
+%\lfoot{}
+%\cfoot{}
+%\rfoot{\vspace{-1cm}\thepage}
+
+%fügt den Befehl \inlineitem hinzu, um Aufzählungen auf der selben Linie zu machen
+\usepackage[inline]{enumitem} %lässt Listenumgebungen vor allem im Spacing anpassen
+%\setlist{nosep} %Spacing wird aus den Listen (global) entfernt (indem itemsep, parsep und partopsep 0 gesetzt werden) 
+\makeatletter %fügt den Befehl \inlineitem hinzu, um Aufzählungen auf der selben Linie zu machen (lässt sich auch alternativ mit {enumerate*} machen)
+	\newcommand{\inlineitem}[1][]{%
+		\ifnum\enit@type=\tw@
+		{\descriptionlabel{#1}}
+		\hspace{\labelsep}%
+		\else
+		\ifnum\enit@type=\z@
+		\refstepcounter{\@listctr}\fi
+		\quad\@itemlabel\hspace{\labelsep}
+		\fi}
+\makeatother
+
+%____________________________________________________
+%Countermanipulationen
+
+\usepackage{chngcntr} %ermöglicht Zugriff auf die Counter
+
+\setcounter{tocdepth}{3} %stellt Nummerierungstiefe im Inhaltsverzeichnis auf 2
+\setcounter{secnumdepth}{3} %stellt Nummerierungstiefe bei den eigentlichen Überschriften auf 2
+
+\counterwithout{figure}{section} %sorgt dafür, dass Grafiken im Stil 1, 2, 3 statt 1.1, 1.2, 1.3 durchnummeriert werden
+
+%\addto\captionsngerman{\renewcommand\figurename{Abb.}} %stellt "Abbildung" bei der Durchnummerierung zu Gewünschtem in der Klammer um
+
+%\addto\captionsngerman{\renewcommand\listfigurename{Abbildungsverzeichnis}} %stellt "Abbildungsverzeichnis" zu Gewünschtem in der Klammer um
+
+%____________________________________________________
+%Grafiken und alles drumherum (wortwörtlich)
+\usepackage{graphicx} %Grafiken einbinden
+\usepackage{subfig} %Umgebung, die mehrere Bilder auf einmal ermöglicht
+
+%Wrapfig-Paket für Grafiken im Textfluss bzw. im Hintergrund hinter Text. Dokumentation siehe http://mirror.unicorncloud.org/CTAN/macros/latex/contrib/wrapfig/wrapfig-doc.pdf
+\usepackage{wrapfig}
+\setlength{\intextsep}{1.5ex} %Vertikaler Abstand vom Anfang des Texts
+\setlength{\belowcaptionskip}{-0.5ex} %Abstand von Caption
+\setlength{\columnsep}{3em} %horizontaler Abstand von Text und Bild
+
+\usepackage{float}%Wichtig: Gibt die [H]-Option, sodass ein Float gewzungen wird, an der angezeigten Stelle zu sein. Man kann mit dem Package auch eigene Floats erstellen.
+
+%__________________________________________________
+%Literaturverzeichnis (mit BibLaTeX):
+\usepackage[babel,german=quotes]{csquotes} %stellt auf deutsche Anführungszeichen um
+\usepackage
+[backend=bibtex,
+style=authoryear,%siehe: https://de.sharelatex.com/learn/Biblatex_citation_styles
+citestyle=authoryear,%siehe: https://de.sharelatex.com/learn/Biblatex_bibliography_styles
+bibencoding=utf8]
+{biblatex}
+\renewcommand*{\nameyeardelim}{\addcomma\space} %Fügt ein Komma zwischen Autor und Jahr hinzu
+%\addbibresource{Abgasliteratur.bib}
+
+%Die \DeclareCiteCommand-Blöcke sorgen dafür, dass bei Biblatex-Authoryear-Stil mit Hyperref auch der Autor gehighlighted wird
+\DeclareCiteCommand{\cite}
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{cite}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand*{\cite}
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{citeyear}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\parencite}[\mkbibparens]
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{cite}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand*{\parencite}[\mkbibparens]
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{citeyear}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\footcite}[\mkbibfootnote]
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{ \usebibmacro{cite}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\footcitetext}[\mkbibfootnotetext]
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{cite}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\textcite}
+{\boolfalse{cbx:parens}}
+{\usebibmacro{citeindex}%
+	\printtext[bibhyperref]{\usebibmacro{textcite}}}
+{\ifbool{cbx:parens}
+	{\bibcloseparen\global\boolfalse{cbx:parens}}
+	{}%
+	\multicitedelim}
+{\usebibmacro{textcite:postnote}}
+
+%____________________________________________________
+%Sonstiges
+
+\usepackage{array}%für lückenlose Rahmen in Tabellen
+\renewcommand{\arraystretch}{1.0}%stellt die Abstände der Tabelle ein, 1.0 ist Standard
+\newcolumntype{m}{>{$} l<{$}} %Neuer Command: Math Mode
+\newcolumntype{M}{>{$\displaystyle} l<{$}} %Neuer Command: Displaystyle Math Mode
+
+\usepackage{multirow} %erlaubt mehrzeilige Zellen
+\usepackage{booktabs} %erlaubt cmidrule, toprule, bottomrule (Excel2Latex benutzt diese Befehle statt \hline)
+\usepackage{bigstrut} %weiteres Paket für Excel2Latex, sorgt für variable Tabellenhöhe (vermutlich)
+
+\usepackage{afterpage}%ermöglicht u.a. Einfügen von leeren Seiten
+
+\usepackage{hyperref}%ermöglicht die roten Links von Verweisen im Dokument und macht das Inhaltsverzeichnis zu Links zu entsprechenden Kapiteln. Optionen siehe https://www.namsu.de/Extra/pakete/Hyperref.html
+\usepackage{nameref} %gibt zusätzlich zur Nummer auch den Namen des Elements aus
+
+\usepackage{calc} %erlaubt u.A. Additionen durch \setlength{\value}{\variable+1cm}
+
+\usepackage{verbatim} %verändert die verbatim-Umgebung und stellt eine Kommentar-Umgebung (\begin{comment}) zur Verfügung
+
+\usepackage[bible]{blindtext} %gibt die Befehle \blindtext[Wiederholungen], \Blindtext[Wiederholungen][Anzahl Paragraphen], \blinddocument, \Blinddocument, \blindlist[Anzahl Items]{Art der Liste} und \Blindlist (mit längeren Texten)
+%Alternativ für manuellen, aber weniger langweiligen Blindtext:
+%“Ezekiel 25:17. "The path of the righteous man is beset on all sides by the inequities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of the darkness. For he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who attempt to poison and destroy my brothers. And you will know I am the Lord when I lay my vengeance upon you." I been sayin' that shit for years. And if you ever heard it, it meant your ass. I never really questioned what it meant. I thought it was just a cold-blooded thing to say to a motherfucker before you popped a cap in his ass. But I saw some shit this mornin' made me think twice. Now I'm thinkin': it could mean you're the evil man. And I'm the righteous man. And Mr. .45 here, he's the shepherd protecting my righteous ass in the valley of darkness. Or it could be you're the righteous man and I'm the shepherd and it's the world that's evil and selfish. I'd like that. But that shit ain't the truth. The truth is you're the weak. And I'm the tyranny of evil men. But I'm tryin, Ringo. I'm tryin' real hard to be the shepherd.
+
+
+
+\begin{comment}
+	Dokumentationen für nicht-selbstverständliche Pakete:
+	Marvosym: http://sunsite.informatik.rwth-aachen.de/ftp/pub/mirror/ctan/fonts/marvosym/doc/fonts/marvosym/marvodoc.pdf
+	Subfiles: http://ctan.space-pro.be/tex-archive/macros/latex/contrib/subfiles/subfiles.pdf
+	Subfig: http://tug.ctan.org/macros/latex2e/contrib/subfig/subfig.pdf
+	Wrapfig: http://mirror.unicorncloud.org/CTAN/macros/latex/contrib/wrapfig/wrapfig-doc.pdf
+	Scrpage2: https://esc-now.de/_/latex-individuelle-kopf--und-fusszeilen/?lang=en
+	Mhchem: ftp://www.ctan.org/tex-archive/macros/latex/contrib/mhchem/mhchem.pdf
+\end{comment}
