@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void readData(char* filename, float dataArray[][366], int& startYear, float discFlag)
+void readData(char* filename, float dataArray[][366], int& numberOfYears, int& startYear, float discFlag)
 {
 	ifstream fileIn;
 	fileIn.open(filename);
@@ -72,12 +72,12 @@ void readData(char* filename, float dataArray[][366], int& startYear, float disc
 			}
 		}
 	}
-	
+	numberOfYears=year_index;
 	fileIn.close();
 	return;
 }
 
-void readUppsala(char* filename, float dataArray[][366], int& startYear, float discFlag)
+void readUppsala(char* filename, float dataArray[][366], int& numberOfYears, int& startYear, float discFlag)
 {
 	ifstream fileIn;
 	fileIn.open(filename);
@@ -105,7 +105,7 @@ void readUppsala(char* filename, float dataArray[][366], int& startYear, float d
 			}
 		}
 	}
-		
+	numberOfYears=year_index;
 	fileIn.close();
 	return;
 }

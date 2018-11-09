@@ -3,16 +3,21 @@
 
 #include <string.h>
 #include "read.hpp"
+#include "averages.hpp"
 
 //using namespace std;
 
 class tempTrender{
 	private:
 	float data[100][366];
+	int numberOfYears;
 	int startYear;
 	char* filename;
 	float discTresh;
 	float discFlag;
+	float averageTemperatureEachYear[100];
+	float averageTemperatureDeviation[100];
+	float averageTemperatureValue;
 	//measures to discard are assigned with the temperature=discFlag.
 	//for filtering: if(temperature<discTresh){discard}
 	
@@ -31,7 +36,11 @@ class tempTrender{
 			}
 		}
 	
-		readData(filename, data, startYear, discFlag);
+		readData(filename, data, numberOfYears, startYear, discFlag);
+		
+		averageTemprature(data, numberOfYears, discTresh, averageTemperatureEachYear);
+		averageTempratureValue = averageValue(averageTemperatureEachYear, numberOfYears);
+		deviation(averageTemperatureEachYear, numberOfYears, averageTempratureValue, averageTemperatureDeviation);
 	}; //Construct using the specified file
 	~tempTrender() {} //Destructor
 	
@@ -42,9 +51,18 @@ class tempTrender{
 	//void tempPerYear(int yearToExtrapolate); //Make a histogram of average temperature per year, then fit and extrapolate to the given year
 	float getDiscTresh(){return discTresh;}
 	float getDiscFlag(){return discFlag;}
-	void averageTempreature()
+	void getAverageTemperature()
 	{
-		
+		return averageTempratureValue;
+	}
+	void plotAverageTemperatureEachYear()
+	{
+		//plot the year vs. the average temperature 
+		return;
+	}
+	void plotDeviation()
+	{
+		//plot the year vs. the deviation
 		return;
 	}
 };
@@ -56,6 +74,9 @@ class Uppsala : public tempTrender{
 	char* filename;
 	float discTresh;
 	float discFlag;
+	float averageTemperatureEachYear[300];
+	float averageTemperatureDeviation[300];
+	float averageTemperature;
 	public:
 	Uppsala(char* filePath):tempTrender(filePath)
 	{
@@ -71,7 +92,13 @@ class Uppsala : public tempTrender{
 			}
 		}
 	
-		readUppsala(filename, data, startYear,discFlag);
+		readUppsala(filename, data, numberOfYears, startYear,discFlag);
+		
+		averageTemprature(data, numberOfYears, discTresh, averageTemperatureEachYear);
+		averageTempratureValue = averageValue(averageTemperatureEachYear, numberOfYears);
+		deviation(averageTemperatureEachYear, numberOfYears, averageTempratureValue, averageTemperatureDeviation);
 	}; //Construct using the specified file
+	
+	
 };
 #endif
