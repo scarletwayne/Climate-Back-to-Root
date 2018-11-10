@@ -38,9 +38,9 @@ class tempTrender{
 	
 		readData(filename, data, numberOfYears, startYear, discFlag);
 		
-		averageTemprature(data, numberOfYears, discTresh, averageTemperatureEachYear);
-		averageTempratureValue = averageValue(averageTemperatureEachYear, numberOfYears);
-		deviation(averageTemperatureEachYear, numberOfYears, averageTempratureValue, averageTemperatureDeviation);
+		averageTemperature(data, numberOfYears, discTresh, averageTemperatureEachYear);
+		averageTemperatureValue = averageValue(averageTemperatureEachYear, numberOfYears);
+		deviation(averageTemperatureEachYear, numberOfYears, averageTemperatureValue, averageTemperatureDeviation);
 	}; //Construct using the specified file
 	~tempTrender() {} //Destructor
 	
@@ -51,18 +51,32 @@ class tempTrender{
 	//void tempPerYear(int yearToExtrapolate); //Make a histogram of average temperature per year, then fit and extrapolate to the given year
 	float getDiscTresh(){return discTresh;}
 	float getDiscFlag(){return discFlag;}
-	void getAverageTemperature()
+	float getAverageTemperature()
 	{
-		return averageTempratureValue;
+		return averageTemperatureValue;
 	}
-	void plotAverageTemperatureEachYear()
+	int getStarYear()
 	{
-		//plot the year vs. the average temperature 
+		return startYear;
+	}
+	int getNumberOfYears()
+	{
+		return numberOfYears;
+	}
+	void getAverageTemperatureEachYear(float array[])
+	{
+		for(int i; i<numberOfYears;i++)
+		{
+			array[i]=averageTemperatureEachYear[i];
+		}
 		return;
 	}
-	void plotDeviation()
+	void getAverageTemperatureDeviation(float array[])
 	{
-		//plot the year vs. the deviation
+		for(int i; i<numberOfYears;i++)
+		{
+			array[i]=averageTemperatureDeviation[i];
+		}
 		return;
 	}
 };
@@ -70,13 +84,14 @@ class tempTrender{
 class Uppsala : public tempTrender{
 	private:
 	float data[300][366];
+	int numberOfYears;
 	int startYear;
 	char* filename;
 	float discTresh;
 	float discFlag;
 	float averageTemperatureEachYear[300];
 	float averageTemperatureDeviation[300];
-	float averageTemperature;
+	float averageTemperatureValue;
 	public:
 	Uppsala(char* filePath):tempTrender(filePath)
 	{
@@ -94,9 +109,9 @@ class Uppsala : public tempTrender{
 	
 		readUppsala(filename, data, numberOfYears, startYear,discFlag);
 		
-		averageTemprature(data, numberOfYears, discTresh, averageTemperatureEachYear);
-		averageTempratureValue = averageValue(averageTemperatureEachYear, numberOfYears);
-		deviation(averageTemperatureEachYear, numberOfYears, averageTempratureValue, averageTemperatureDeviation);
+		averageTemperature(data, numberOfYears, discTresh, averageTemperatureEachYear);
+		averageTemperatureValue = averageValue(averageTemperatureEachYear, numberOfYears);
+		deviation(averageTemperatureEachYear, numberOfYears, averageTemperatureValue, averageTemperatureDeviation);
 	}; //Construct using the specified file
 	
 	
