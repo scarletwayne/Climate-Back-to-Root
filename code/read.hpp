@@ -42,10 +42,12 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 		}
 		if(date=="-12-31"&&new_date=="-01-01")
 		{
+			for(day_index;day_index<366;day_index++)
+			{
+				dataArray[year_index][day_index]=discFlag;
+			}
 			day_index=0;
 			year_index++;
-			for(int i=0;i<366;i++)cout<<dataArray[year_index-1][i]<<" ";
-			cout<<endl;
 		}
 		getline(fileIn, trash, ';');
 		fileIn>>temperature>>ch>>quality;
@@ -62,6 +64,7 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 			}
 			day_index++;
 			isGood=true;
+			date=new_date;
 		}
 		if(startWriting)
 		{
@@ -88,7 +91,7 @@ void readUppsala(char* filename, float dataArray[][366], int& numberOfYears, int
 	
 	while(fileIn>>year>>month>>day>>temperature>>other>>dataId)
 	{
-		if(month==1&&day==1)
+		if(month==1 && day==1 && !startWriting)
 		{
 			startWriting=true;
 			startYear=year;
@@ -102,6 +105,15 @@ void readUppsala(char* filename, float dataArray[][366], int& numberOfYears, int
 			else
 			{
 				dataArray[year_index][day_index]=discFlag;
+			}
+			if(month==12&&day==31)
+			{
+				for(day_index;day_index<366;day_index++)
+				{
+					dataArray[year_index][day_index]=discFlag;
+				}
+				day_index=0;
+				year_index++;
 			}
 		}
 	}
