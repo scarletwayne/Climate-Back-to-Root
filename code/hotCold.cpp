@@ -28,8 +28,8 @@ void hotCold()
 	
 	//TODO: Modify findHotCold() so that it stores the days in hottest[] and coldest[]
 	
-	TH1I* histHottest=new TH1I("", "Counts of the hottest and coldest days of the year; DayNumber; Counts", 366, 1, 366);
-	//TH1I* histColdest=new TH1I("hPhi", "ROOT func generated v2 distribution; x; Counts", 366, 1, 366);
+	TH1I* histHottest=new TH1I("", "Counts of the hottest and coldest days of the year; DayNumber; Counts", 366, 1, 367);
+	//TH1I* histColdest=new TH1I("hPhi", "ROOT func generated v2 distribution; x; Counts", 366, 1, 367);
 	
 	for(int yearIndex=0;yearIndex<totYears;yearIndex++)
 	{
