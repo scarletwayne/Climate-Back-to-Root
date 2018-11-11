@@ -18,16 +18,15 @@ class tempTrender{
 	float averageTemperatureEachYear[100];
 	float averageTemperatureDeviation[100];
 	float averageTemperatureValue;
-	//measures to discard are assigned with the temperature=discFlag.
-	//for filtering: if(temperature<discTresh){discard}
+	
 	
 	public:
 	tempTrender(char* filePath)
 	{
 		filename = filePath;
 		startYear=0;
-		discTresh = -274.0;
-		discFlag = -275.0;
+		discFlag = -275.0;//measures to discard are assigned with the temperature=discFlag.
+		discTresh = -274.0;//for filtering: if(temperature<discTresh){discard}
 		for(int i=0;i<100;i++)
 		{
 			for(int j=0;j<366;j++)

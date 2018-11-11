@@ -1,40 +1,63 @@
-void averageTemperature(float temperature[][366], int numberOfYears, float treshold, float averageTemperatureArray[])
+void averageTemperature( float temperature[][366], int numberOfYears, float treshold, float averageTemperatureArray[] )
 {
-	int daysConsidered;
-	for(int year=0;year<numberOfYears;year++)
+	int daysConsidered=366;
+	for(int yearIndex=0;yearIndex<numberOfYears;yearIndex++)
 	{
-		daysConsidered = 366;
-		averageTemperatureArray[year] = 0;
-		for(int day=0;day<366;day++)
+		averageTemperatureArray[yearIndex] = 0;
+		for(int dayIndex=0;dayIndex<366;dayIndex++)
 		{
-			if(temperature[year][day]<treshold)
+			if(temperature[yearIndex][dayIndex]<treshold) //if element has been set with discFlag
 			{
-				daysConsidered--;
-				continue;
+				daysConsidered--; //decrement to compensate averaging because of missing element
+				continue; //effectively discard element by not summing it up
 			}
-			averageTemperatureArray[year]+=temperature[year][day];
+			averageTemperatureArray[yearIndex]+=temperature[yearIndex][dayIndex];
 		}
-		averageTemperatureArray[year]/=daysConsidered;
+		averageTemperatureArray[yearIndex]/=daysConsidered;
 	}
 	return;
 }
 
-float averageValue(float array[], int effectiveLength)
+float overallAverageValue( float array[], int effArrSpan )
 {
 	float average=0;
-	for(int i=0;i<effectiveLength;i++)
+	for(int i=0; i<effArrSpan; i++)
 	{
 		average+=array[i];
 	}
-	average/=effectiveLength;
+	average/=effArrSpan;
 	return average;
 }
-
-void deviation(float array[], int effectiveLength, float average, float deviationArray[])
+/*
+void residuals( float array[], int effArrSpan, float average, float residualsArray[] )
 {
-	for(int i=0;i<effectiveLength;i++)
+	for(int i=0;i<effArrSpan;i++)
 	{
-		deviationArray[i]=array[i]-average;
+		residualsArray[i]=array[i]-average;
 	}
 	return;
 }
+*/
+
+
+void averageTemperatureResidualsPlot ( float yearAvgArr[]/*meant to be the residuals*/, int effArrSpan, int startYear )
+{
+	TCanvas* meanTempCanv = new TCanvas("meanTemps", "mean temperature over all years recorded", 1280, 720);
+	TH1F* meanTempHistHot= new TH1F("mean temperatures", "mean temperature over all years recorded;year;temperature (°C)", effArrSpan, startYear, startYear+effArrSpan);
+	for(int yearIndex=0;yearIndex<effArrSpan; yearIndex++)
+	{
+		if(yearAvgArr[yearIndex]>0)
+		{
+			meanTempHistHot->Fill( yearIndex , yearAvgArr[yearIndex] ); //fill the hist accordingly
+		}
+		else
+		{
+			meanTempHistCold->Fill(yearIndex , yearAvgArr(yearIndex] );
+		}
+		meanTempHistHot->Draw("BCL"); meanTempHistCold->Draw("same");
+	}
+	
+	
+	
+}
+
