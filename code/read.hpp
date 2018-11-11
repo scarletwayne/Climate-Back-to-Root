@@ -64,6 +64,7 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 			}
 			day_index++;
 			isGood=true;
+			date=new_date;
 		}
 		if(startWriting)
 		{
