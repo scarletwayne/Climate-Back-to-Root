@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void readData(char* filename, float dataArray[][366], int& numberOfYears, int& startYear, float discFlag)
+void readData(char* filename, double dataArray[][366], int& numberOfYears, int& startYear, double discFlag)
 {
 	ifstream fileIn;
 	fileIn.open(filename);
@@ -29,7 +29,7 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 	bool startWriting=false, isGood=true;
 	int year, year_index=0,day_index=0;
 	string date="", new_date;
-	float temperature;
+	double temperature;
 	char quality;
 	while(fileIn>>year)
 	{
@@ -42,7 +42,7 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 		}
 		if(date=="-12-31"&&new_date=="-01-01")
 		{
-			for(day_index;day_index<366;day_index++)
+			for(;day_index<366;day_index++)
 			{
 				dataArray[year_index][day_index]=discFlag;
 			}
@@ -80,14 +80,14 @@ void readData(char* filename, float dataArray[][366], int& numberOfYears, int& s
 	return;
 }
 
-void readUppsala(char* filename, float dataArray[][366], int& numberOfYears, int& startYear, float discFlag)
+void readUppsala(char* filename, double dataArray[][366], int& numberOfYears, int& startYear, double discFlag)
 {
 	ifstream fileIn;
 	fileIn.open(filename);
 	
 	bool startWriting=false;
 	int year,year_index=0,day_index=0,month,day,dataId;
-	float temperature, other;
+	double temperature, other;
 	
 	while(fileIn>>year>>month>>day>>temperature>>other>>dataId)
 	{
@@ -106,18 +106,19 @@ void readUppsala(char* filename, float dataArray[][366], int& numberOfYears, int
 			{
 				dataArray[year_index][day_index]=discFlag;
 			}
+			day_index++;
 			if(month==12&&day==31)
 			{
-				for(day_index;day_index<366;day_index++)
+				for(;day_index<366;day_index++)
 				{
 					dataArray[year_index][day_index]=discFlag;
 				}
 				day_index=0;
 				year_index++;
+				numberOfYears=year_index;
 			}
 		}
 	}
-	numberOfYears=year_index;
 	fileIn.close();
 	return;
 }
