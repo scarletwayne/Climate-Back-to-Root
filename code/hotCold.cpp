@@ -4,9 +4,11 @@
 #include <TCanvas.h>
 #include <TH1.h>
 #include <TMath.h>
+#include <algorithm>
 
-//void findHotCold(float[][366],int);
-int findCold(float (&degs)[][], int yearIndex);
+int findHot(float degs[][366],int yearIndex);
+int findCold(float degs[][366], int yearIndex);
+void plotHotCold(int hottestArr[], int coldestArr[], int totYears);
 
 
 void hotCold()
@@ -18,58 +20,52 @@ void hotCold()
 	
 	for(int yearIndex=0;yearIndex<totYears;yearIndex++)
 	{
-		//findHotCold(DegMatr, yearIndex);
-		*(hottest+yearIndex)=1+distance(&degMatr[yearIndex][0] , max_element( &degMatr[yearIndex][0], &degMatr[yearIndex][365] ));
+		//findCold(DegMatr, yearIndex);
+		hottest[yearIndex]=1+distance(&degMatr[yearIndex][0] , max_element( &degMatr[yearIndex][0], &degMatr[yearIndex][365] ));
 		coldest[yearIndex]=findCold(degMatr, yearIndex);
-		
-		cout<<"Coldest day of year "<<yearIndex<<": "<<coldest[yearIndex]<<endl;
+		//OBS: after this point, we will use Jan01 = 1 (not 0 anymore)
 	}
-		
 	
-	//TODO: Modify findHotCold() so that it stores the days in hottest[] and coldest[]
-	
-	TH1I* histHottest=new TH1I("", "Counts of the hottest and coldest days of the year; DayNumber; Counts", 366, 1, 367);
-	//TH1I* histColdest=new TH1I("hPhi", "ROOT func generated v2 distribution; x; Counts", 366, 1, 367);
-	
-	for(int yearIndex=0;yearIndex<totYears;yearIndex++)
-	{
-		histHottest->Fill(hottest[yearIndex]);
-		//histColdest->Fill(coldest[yearIndex]);
-	}
-	TCanvas* hotColdCanv = new TCanvas("HotColdDays", "Frequency of hottest and coldest days of the year", 900, 600);
-	histHottest->Draw();//histColdest->Draw();
+	plotHotCold(hottest, coldest, totYears);
 	
 }
 
 
-int findCold(float (&degs)[][], int yearIndex)
+int findHot(float degs[][366],int yearIndex)
+{
+	return 1+distance(max_element( &degs[yearIndex][0], &degs[yearIndex][365] ),&degs[yearIndex][0]);
+}
+
+int findCold(float degs[][366], int yearIndex)
 {
 	int coldestTillNow=0;
 	for(int dayIndex=1; dayIndex<366; dayIndex++)
 	{
 		if(degs[yearIndex][dayIndex]<-274) continue; //discard day right away
-		if(degs[yearIndex][dayIndex]<degs[yearIndex][dayIndex-1]) coldestTillNow=dayIndex;
+		if(degs[yearIndex][dayIndex]<degs[yearIndex][coldestTillNow]) coldestTillNow=dayIndex;
 	}
 	return (coldestTillNow++);
 }
 
-
-
-/*
-void findHotCold(float degMatr[][366],int yearIndex)
+void plotHotCold( int hottest[], int coldest[], int totYears )
 {
-	int currHottest;
-	currHottest=1+distance(max_element( &degMatr[yearIndex][0], &degMatr[yearIndex][365] ),&degMatr[yearIndex][0]);
-	//(hottest+yearIndex)=currHottest;
-	cout<<"Hottest day of year "<<yearIndex<<": "<<currHottest<<endl;
+	TH1I* meanTempHistHot = new TH1I("hottest days", "frequentness of hottest days;number of day in year;counts", 366, 1, 367);
+	TH1I* meanTempHistCold= new TH1I("coldest days", "frequentness of coldest days;number of day in year;counts", 366, 1, 367);
+	TCanvas* hotColdCanv = new TCanvas("hottest-coldest", "frequency of hottest and coldest days", 1280, 720);
+	for(int yearIndex=0; yearIndex<totYears; yearIndex++)
+	{
+		meanTempHistHot->Fill(hottest[yearIndex]);
+		meanTempHistCold->Fill(coldest[yearIndex]);
+	}
+	meanTempHistHot->SetFillColor(2); meanTempHistCold->SetFillColor(4);
+	meanTempHistHot->Draw("BL"); meanTempHistCold->Draw("BC SAME");
+	
+	meanTempHistHot->Fit("gaus","Q","C");
+	
+	
+	/*for coldest days fit: 
+	 *first make new histogram (that is not drawn) with coldest days shifted and fit to these values
+	 *then don't draw the fit directly but retrieve the parameters
+	 *then use the parameters to make two new functions which are identical to the fit functions but use the appropiate ranges for the boundaries
+	*/ 
 }
-*/
-
-
-/*
-void increaseAgeByRef(int &Age){Age++; cout << "Adress by Ref: "<< &Age<<endl;}
-increaseAgeByRef(myAge);
-void increaseAgeByPtr(int* AgePtr){(*AgePtr)++; cout << "Adress by pointer: "<<AgePtr<<endl;}
-increaseAgeByPtr(&Age);
-
-*/
